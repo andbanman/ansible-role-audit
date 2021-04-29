@@ -1,6 +1,33 @@
 ---
 audit_rules_dir: /etc/audit/rules.d
 audit_packages: [auditd, audispd-plugins]
+
+audit_audisp_remote_config:
+  remote_server:
+  port: 60
+  local_port:
+  transport: tcp
+  mode: immediate
+  queue_depth: 10240
+  format: managed
+  network_retry_time: 1
+  max_tries_per_record: 3
+  max_time_per_record: 5
+  heartbeat_timeout: 0
+  network_failure_action: stop
+  disk_low_action: ignore
+  disk_full_action: warn_once
+  disk_error_action: warn_once
+  remote_ending_action: reconnect
+  generic_error_action: syslog
+  generic_warning_action: syslog
+  queue_error_action: stop
+  overflow_action: stop
+  enable_krb5: no
+  krb5_principal:
+  krb5_client_name: auditd
+  krb5_key_file: /etc/audisp/audisp-remote.key
+
 audit_auditd_config:
   local_events: yes
   write_logs: yes
@@ -15,7 +42,7 @@ audit_auditd_config:
   disp_qos: lossy
   dispatcher: /sbin/audispd
   name_format: hostname
-  ##name: mydomain
+  name: mydomain
   max_log_file_action: ROTATE
   space_left: 75
   space_left_action: SYSLOG
@@ -26,15 +53,32 @@ audit_auditd_config:
   disk_full_action: SUSPEND
   disk_error_action: SUSPEND
   use_libwrap: yes
-  ##tcp_listen_port: 60
+  tcp_listen_port: 60
   tcp_listen_queue: 5
   tcp_max_per_addr: 1
-  ##tcp_client_ports: 1024-65535
+  tcp_client_ports: 1024-65535
   tcp_client_max_idle: 0
   enable_krb5: no
   krb5_principal: auditd
-  ##krb5_key_file: /etc/audit/audit.key
+  krb5_key_file: /etc/audit/audit.key
   distribute_network: no
+
+audit_au_remote_config:
+  active: no
+  direction: out
+  path: /sbin/audisp-remote
+  type: always
+  args:
+  format: string
+
+audit_audispd_config:
+  q_depth: 250
+  overflow_action: SYSLOG
+  priority_boost: 4
+  max_restarts: 10
+  name_format: HOSTNAME
+  name:
+  plugin_dir: /etc/audisp/plugins.d/
 
 audit_rules:
   - name: default

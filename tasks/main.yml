@@ -6,10 +6,15 @@
   notify:
     - restart auditd
 
-- name: Install auditd config
+- name: Install auditd configurations
+  loop:
+    - audit/auditd.conf
+    - audispd/audispd.conf
+    - audispd/audisp-remote.conf
+    - audispd/plugins.d/au-remote.conf
   template:
-    src: 'auditd.conf.j2'
-    dest: '/etc/audit/auditd.conf'
+    src: "templates/{{ item }}"
+    dest: "/etc/{{ item }}"
     mode: '640'
     owner: root
     group: root
