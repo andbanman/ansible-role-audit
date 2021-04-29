@@ -1,0 +1,22 @@
+---
+- name: Install linux audit subsystem
+  package:
+    name: "{{ audit_packages }}"
+    state: present
+  notify:
+    - restart auditd
+
+- name: Install auditd config
+  template:
+    src: auditd.conf.j2
+    dest: /etc/audit/auditd.conf
+  notify:
+    - restart auditd
+
+- name: Install audit rules
+  loop: "{{ audit_rules }}"
+  copy:
+    content: "{{ item.rules | join('\n') }}" #TODO check this
+    dest: "{{ audit_rules_dir }}/{{ item.name }}.rules"
+  notify:
+    - restart auditd
