@@ -8,15 +8,21 @@
 
 - name: Install auditd config
   template:
-    src: auditd.conf.j2
-    dest: /etc/audit/auditd.conf
+    src: 'auditd.conf.j2'
+    dest: '/etc/audit/auditd.conf'
+    mode: '640'
+    owner: root
+    group: root
   notify:
     - restart auditd
 
 - name: Install audit rules
   loop: "{{ audit_rules }}"
   copy:
-    content: "{{ item.rules | join('\n') }}" #TODO check this
+    content: "{{ item.rules | join('\n') }}\n"
     dest: "{{ audit_rules_dir }}/{{ item.name }}.rules"
+    mode: '640'
+    owner: root
+    group: root
   notify:
     - restart auditd
