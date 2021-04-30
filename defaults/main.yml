@@ -2,7 +2,7 @@
 audit_rules_dir: /etc/audit/rules.d
 audit_packages: [auditd, audispd-plugins]
 
-audit_audisp_remote_config:
+default_audit_audisp_remote_config:
   remote_server:
   port: 60
   local_port:
@@ -28,7 +28,7 @@ audit_audisp_remote_config:
   krb5_client_name: auditd
   krb5_key_file: /etc/audisp/audisp-remote.key
 
-audit_auditd_config:
+default_audit_auditd_config:
   local_events: yes
   write_logs: yes
   log_file: /var/log/audit/audit.log
@@ -63,7 +63,7 @@ audit_auditd_config:
   krb5_key_file: /etc/audit/audit.key
   distribute_network: no
 
-audit_au_remote_config:
+default_audit_au_remote_config:
   active: no
   direction: out
   path: /sbin/audisp-remote
@@ -71,7 +71,7 @@ audit_au_remote_config:
   args:
   format: string
 
-audit_audispd_config:
+default_audit_audispd_config:
   q_depth: 250
   overflow_action: SYSLOG
   priority_boost: 4
@@ -79,6 +79,19 @@ audit_audispd_config:
   name_format: HOSTNAME
   name:
   plugin_dir: /etc/audisp/plugins.d/
+
+# These to be defined by user
+audit_audisp_remote_config:
+audit_au_remote_config:
+audit_audispd_config:
+audit_auditd_config:
+
+# Merge user-defined into default, this way ommitted fields in the user config
+# will get the default
+effective_audit_audisp_remote_config: "{{ default_audit_audisp_remote_config | combine(audit_audisp_remote_config) }}"
+effective_audit_auditd_config: "{{ default_audit_auditd_config | combine(audit_auditd_config) }}"
+effective_audit_au_remote_config: "{{ default_audit_au_remote_config | combine(audit_au_remote_config) }}"
+effective_audit_audispd_config: "{{ default_audit_audispd_config | combine(audit_audispd_config) }}"
 
 audit_rules:
   - name: default
