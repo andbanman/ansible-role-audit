@@ -1,7 +1,7 @@
 #
 # Managed by Ansible
 #
-{% for key in audit_auditd_config | sort %}
-{% set val = audit_auditd_config[key] %}
+{% for key in effective_audit_auditd_config | sort %}
+{% set val = effective_audit_auditd_config[key] %}
 {{ key }} = {{ 'yes' if val is sameas true else ('no' if val is sameas false else val) }}
 {% endfor %}

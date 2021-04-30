@@ -9,9 +9,9 @@
 - name: Install auditd configurations
   loop:
     - audit/auditd.conf
-    - audispd/audispd.conf
-    - audispd/audisp-remote.conf
-    - audispd/plugins.d/au-remote.conf
+    - audisp/audispd.conf
+    - audisp/audisp-remote.conf
+    - audisp/plugins.d/au-remote.conf
   template:
     src: "templates/{{ item }}.j2"
     dest: "/etc/{{ item }}"
