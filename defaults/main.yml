@@ -81,10 +81,10 @@ default_audit_audispd_config:
   plugin_dir: /etc/audisp/plugins.d/
 
 # These to be defined by user
-audit_audisp_remote_config:
-audit_au_remote_config:
-audit_audispd_config:
-audit_auditd_config:
+audit_audisp_remote_config: {}
+audit_au_remote_config: {}
+audit_audispd_config: {}
+audit_auditd_config: {}
 
 # Merge user-defined into default, this way ommitted fields in the user config
 # will get the default
