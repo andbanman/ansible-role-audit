@@ -1,5 +1,6 @@
 ---
 - name: Install linux audit subsystem
+  tags: ['auditd']
   package:
     name: "{{ audit_packages }}"
     state: present
@@ -7,6 +8,8 @@
     - restart auditd
 
 - name: Install auditd configurations
+  tags: ['auditd']
+  package:
   loop:
     - audit/auditd.conf
     - audisp/audispd.conf
@@ -22,6 +25,8 @@
     - restart auditd
 
 - name: Install audit rules
+  tags: ['auditd']
+  package:
   loop: "{{ audit_rules }}"
   copy:
     content: "{{ item.rules | join('\n') }}\n"
