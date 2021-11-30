@@ -9,7 +9,6 @@
 
 - name: Install auditd configurations
   tags: ['auditd']
-  package:
   loop:
     - audit/auditd.conf
     - audisp/audispd.conf
@@ -26,7 +25,6 @@
 
 - name: Install audit rules
   tags: ['auditd']
-  package:
   loop: "{{ audit_rules }}"
   copy:
     content: "{{ item.rules | join('\n') }}\n"
